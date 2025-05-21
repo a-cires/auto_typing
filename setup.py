@@ -11,6 +11,7 @@ setup(
         'opencv-python',
         'PyYAML',
         'pytesseract',
-        'scikit-learn'
+        'scikit-learn',
+        'python-can'
     ],
 )
