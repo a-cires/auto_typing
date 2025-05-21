@@ -1,11 +1,22 @@
 
 import cv2
-import time
 import os
+from pathlib import Path
+from auto_typing.utils.config import load_config, ROOT_DIR
+import argparse
 
-def capture_frames():
-    save_dir = "../captures"
-    os.makedirs(save_dir, exist_ok=True)
+def get_next_filename(capture_dir, base='frame', ext='jpg'):
+    existing = sorted([f.name for f in capture_dir.glob(f'{base}*.{ext}')])
+    index = 1
+    if existing:
+        last = existing[-1]
+        digits = ''.join(filter(str.isdigit, last))
+        index = int(digits) + 1 if digits else 1
+    return capture_dir / f"{base}{index:03d}.{ext}"
+
+def capture_frames(config):
+    capture_dir = ROOT_DIR / config['paths']['capture_dir']
+    capture_dir.mkdir(parents=True, exist_ok=True)
 
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
@@ -23,9 +34,9 @@ def capture_frames():
 
         key = cv2.waitKey(1)
         if key == 32:  # SPACE key
-            filename = os.path.join(save_dir, f"frame{captured + 1}.jpg")
-            cv2.imwrite(filename, frame)
-            print(f"📸 Captured {filename}")
+            filename = get_next_filename(capture_dir)
+            cv2.imwrite(str(filename), frame)
+            print(f"📸 Captured {filename.name}")
             captured += 1
             if captured < 2:
                 print("➡️ Move the camera slightly and press SPACE again.")
@@ -38,4 +49,9 @@ def capture_frames():
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    capture_frames()
+    parser = argparse.ArgumentParser(description='Capture stereo or sequence frames.')
+    parser.add_argument('--config', type=str, default='config.yaml', help='Path to YAML config file')
+    args = parser.parse_args()
+
+    config = load_config(args.config)
+    capture_frames(config)

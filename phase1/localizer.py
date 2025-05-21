@@ -1,22 +1,25 @@
+
 import cv2
 import numpy as np
 import pytesseract
 from pathlib import Path
-import yaml
-
-# Define project root
-ROOT_DIR = Path(__file__).resolve().parent.parent
-
-def load_config(config_path):
-    with open(config_path, 'r') as f:
-        return yaml.safe_load(f)
+from auto_typing.utils.config import ROOT_DIR
 
 class Phase1KeyboardLocalization:
     def __init__(self, config):
         self.config = config
-        self.camera_matrix = np.array([[config['depth']['focal_length'], 0, 320],
-                                       [0, config['depth']['focal_length'], 240],
-                                       [0, 0, 1]])
+
+        if config.get('calibration', {}).get('load_from_file', False):
+            calib_file = ROOT_DIR / config['calibration']['output_file']
+            if not calib_file.exists():
+                raise FileNotFoundError(f"Camera intrinsics file not found at: {calib_file}")
+            data = np.load(calib_file)
+            self.camera_matrix = data['camera_matrix']
+        else:
+            f = config['depth']['focal_length']
+            self.camera_matrix = np.array([[f, 0, 320],
+                                           [0, f, 240],
+                                           [0, 0, 1]])
 
     def detect_features(self, image):
         orb = cv2.ORB_create(

@@ -4,7 +4,7 @@ import numpy as np
 import argparse
 import yaml
 from pathlib import Path
-from phase1_keyboard_localization import Phase1KeyboardLocalization, load_config
+from auto_typing import Phase1KeyboardLocalization, load_config
 
 # Define project root
 ROOT_DIR = Path(__file__).resolve().parent.parent

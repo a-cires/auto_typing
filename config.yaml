@@ -31,7 +31,7 @@ calibration:
   pattern_size: [8, 6] # internal corners
   square_size: 0.025 # meters
   calibration_image_dir: calibration_images/
-  output_file: camera_intrinsics.npz
+  output_file: models/camera_intrinsics.npz
 
 # File paths
 paths:
