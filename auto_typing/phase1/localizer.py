@@ -36,27 +36,43 @@ class Phase1KeyboardLocalization:
                 f.write(f"{datetime.now().isoformat()} - {message}\n")
 
     def detect_features(self, image):
-        self.log("Starting ORB feature detection...")
-        orb = cv2.ORB_create(
-            nfeatures=self.config['orb']['n_features'],
-            scaleFactor=self.config['orb']['scale_factor'],
-            nlevels=self.config['orb']['n_levels']
+        self.log("Detecting good features to track (Shi-Tomasi)...")
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        features = cv2.goodFeaturesToTrack(
+            gray,
+            maxCorners=1000,
+            qualityLevel=0.01,
+            minDistance=10
         )
-        keypoints, descriptors = orb.detectAndCompute(image, None)
-        self.log(f"Detected {len(keypoints)} keypoints.")
-        return keypoints, descriptors
+        self.log(f"Detected {len(features) if features is not None else 0} trackable points.")
+        return features
 
-    def match_features(self, desc1, desc2):
-        self.log("Matching features using FLANN...")
-        index_params = self.config['flann']['index_params']
-        search_params = self.config['flann']['search_params']
-        ratio_thresh = self.config['flann']['ratio_test_threshold']
+    def estimate_depth_from_flow(self, img1, img2, translation_m):
+        self.log("Estimating depth from optical flow...")
+        gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
+        gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
 
-        flann = cv2.FlannBasedMatcher(index_params, search_params)
-        matches = flann.knnMatch(desc1, desc2, k=2)
-        good_matches = [m for pair in matches if len(pair) == 2 for m, n in [pair] if m.distance < ratio_thresh * n.distance]
-        self.log(f"Found {len(good_matches)} good matches.")
-        return good_matches
+        pts1 = self.detect_features(img1)
+        if pts1 is None:
+            self.log("No features to track in image 1.")
+            return np.array([]), np.array([])
+
+        pts2, status, _ = cv2.calcOpticalFlowPyrLK(gray1, gray2, pts1, None)
+
+        focal_length = self.camera_matrix[0, 0]
+        depths = []
+        pts1_filtered = []
+
+        for (p1, p2, s) in zip(pts1, pts2, status):
+            if s[0] == 1:
+                dx = p2[0][0] - p1[0][0]
+                if abs(dx) > 1e-3:
+                    Z = (focal_length * translation_m) / dx
+                    depths.append(Z)
+                    pts1_filtered.append(p1[0])
+
+        self.log(f"Tracked {len(depths)} points with valid depth estimates.")
+        return np.array(pts1_filtered), np.array(depths)
 
     def compute_disparity_map(self, imgL, imgR):
         self.log("Computing disparity map...")
