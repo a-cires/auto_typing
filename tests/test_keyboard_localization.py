@@ -2,24 +2,18 @@
 import cv2
 import numpy as np
 import argparse
-import yaml
 from pathlib import Path
-from auto_typing import Phase1KeyboardLocalization, load_config
-
-# Define project root
-ROOT_DIR = Path(__file__).resolve().parent.parent
+from auto_typing.phase1.localizer import Phase1KeyboardLocalization
+from auto_typing.utils.config import load_config, ROOT_DIR
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Phase 1 Test Script')
     parser.add_argument('--config', type=str, default='config.yaml', help='Path to YAML config file')
-    parser.add_argument('--image1', type=str, default='captures/frame1.jpg', help='Path to first image')
-    parser.add_argument('--image2', type=str, default='captures/frame2.jpg', help='Path to second image')
+    parser.add_argument('--image1', type=str, default='captures/frame001.jpg', help='Path to first image')
+    parser.add_argument('--image2', type=str, default='captures/frame002.jpg', help='Path to second image')
     args = parser.parse_args()
 
-    config_path = Path(args.config)
-    if not config_path.is_absolute():
-        config_path = ROOT_DIR / config_path
-    config = load_config(config_path)
+    config = load_config(args.config)
 
     image1_path = ROOT_DIR / args.image1
     image2_path = ROOT_DIR / args.image2

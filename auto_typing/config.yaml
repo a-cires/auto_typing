@@ -42,4 +42,4 @@ paths:
 # Display and debug
 debug:
   show_matches: true
-  verbose_logging: false
+  verbose_logging: true
