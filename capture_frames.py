@@ -1,8 +1,12 @@
 
 import cv2
 import time
+import os
 
 def capture_frames():
+    save_dir = "captures"
+    os.makedirs(save_dir, exist_ok=True)
+
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
         print("❌ Failed to open camera.")
@@ -19,7 +23,7 @@ def capture_frames():
 
         key = cv2.waitKey(1)
         if key == 32:  # SPACE key
-            filename = f"frame{captured + 1}.jpg"
+            filename = os.path.join(save_dir, f"frame{captured + 1}.jpg")
             cv2.imwrite(filename, frame)
             print(f"📸 Captured {filename}")
             captured += 1

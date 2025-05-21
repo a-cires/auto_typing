@@ -1,7 +1,6 @@
-
 import cv2
 import numpy as np
-from phase1_keyboard_localization import Phase1KeyboardLocalization
+from auto_typing.phase1.phase1_keyboard_localization import Phase1KeyboardLocalization
 
 # Placeholder intrinsics
 K = np.array([[600, 0, 320],
