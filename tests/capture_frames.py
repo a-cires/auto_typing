@@ -4,7 +4,7 @@ import time
 import os
 
 def capture_frames():
-    save_dir = "captures"
+    save_dir = "../captures"
     os.makedirs(save_dir, exist_ok=True)
 
     cap = cv2.VideoCapture(0)

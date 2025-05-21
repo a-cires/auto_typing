@@ -1,0 +1,44 @@
+# Keyboard Localization Config File
+
+# ORB feature detection
+orb:
+  n_features: 500
+  scale_factor: 1.2
+  n_levels: 8
+
+# FLANN matcher
+flann:
+  index_params:
+    algorithm: 6 # FLANN_INDEX_LSH for ORB
+    table_number: 6
+    key_size: 12
+    multi_probe_level: 1
+  search_params:
+    checks: 50
+  ratio_test_threshold: 0.75
+
+# Text detection
+text:
+  min_confidence: 60
+
+# Disparity to depth
+depth:
+  focal_length: 600 # in pixels
+  baseline: 0.01 # in meters
+
+# Camera calibration
+calibration:
+  pattern_size: [8, 6] # internal corners
+  square_size: 0.025 # meters
+  calibration_image_dir: calibration_images/
+  output_file: camera_intrinsics.npz
+
+# File paths
+paths:
+  log_dir: logs/
+  capture_dir: captures/
+
+# Display and debug
+debug:
+  show_matches: true
+  verbose_logging: false

@@ -8,8 +8,8 @@ K = np.array([[600, 0, 320],
               [0,   0,   1]])
 
 # Load images
-img1 = cv2.imread('frame1.jpg', cv2.IMREAD_COLOR)  # Replace with actual image
-img2 = cv2.imread('frame2.jpg', cv2.IMREAD_COLOR)  # Replace with actual image
+img1 = cv2.imread('../captures/frame1.jpg', cv2.IMREAD_COLOR)  # Replace with actual image
+img2 = cv2.imread('../captures/frame2.jpg', cv2.IMREAD_COLOR)  # Replace with actual image
 
 if img1 is None or img2 is None:
     raise ValueError("Check image paths: frame1.jpg and frame2.jpg not found.")
