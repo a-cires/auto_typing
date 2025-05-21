@@ -32,12 +32,13 @@ calibration:
   square_size: 0.02828 # meters
   calibration_image_dir: calibration_images/
   output_file: models/camera_intrinsics.npz
-  load_from_file: true         # whether to load camera matrix from file
+  load_from_file: true # whether to load camera matrix from file
 
 # File paths
 paths:
   log_dir: logs/
   capture_dir: captures/
+  results_dir: results/
 
 # Display and debug
 debug:
