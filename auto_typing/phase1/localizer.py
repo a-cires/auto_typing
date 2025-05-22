@@ -111,6 +111,8 @@ class Phase1KeyboardLocalization:
 
     def fit_plane_svm(self, points_3d):
         self.log("Fitting plane using RANSAC...")
+        if points_3d.shape[0] < 3:
+            raise ValueError(f"Need at least 3 points to fit a plane, got {points_3d.shape[0]}")
         from sklearn.linear_model import RANSACRegressor
         X = points_3d[:, :2]
         y = points_3d[:, 2]

@@ -11,8 +11,8 @@ from datetime import datetime
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Phase 1 Optical Flow Depth Estimation Test Script')
     parser.add_argument('--config', type=str, default='config.yaml', help='Path to YAML config file')
-    parser.add_argument('--image1', type=str, default='captures/frame001.jpg', help='Path to first image')
-    parser.add_argument('--image2', type=str, default='captures/frame002.jpg', help='Path to second image')
+    parser.add_argument('--image1', type=str, default='captures/frame003.jpg', help='Path to first image')
+    parser.add_argument('--image2', type=str, default='captures/frame004.jpg', help='Path to second image')
     parser.add_argument('--translation', type=float, default=0.01, help='Translation between frames in meters')
     args = parser.parse_args()
 
