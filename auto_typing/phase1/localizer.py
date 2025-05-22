@@ -89,10 +89,45 @@ class Phase1KeyboardLocalization:
         return depth_map
 
     def detect_text_regions(self, image):
-        self.log("Detecting text regions with Tesseract...")
-        print("Detecting text regions with Tesseract...")
-        text_data = pytesseract.image_to_data(image, output_type=pytesseract.Output.DICT)
-        return text_data
+        self.log("Detecting keyboard key regions using morphology and OCR...")
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 15))
+        tophat = cv2.morphologyEx(blurred, cv2.MORPH_TOPHAT, kernel)
+        _, thresh = cv2.threshold(tophat, 30, 255, cv2.THRESH_BINARY)
+        clean_kernel = np.ones((3, 3), np.uint8)
+        cleaned = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, clean_kernel)
+
+        # Extract key contours
+        height = cleaned.shape[0]
+        mask = np.zeros_like(cleaned)
+        mask[int(height * 0.25):, :] = 255
+        masked = cv2.bitwise_and(cleaned, mask)
+        contours, _ = cv2.findContours(masked, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        key_contours = [cnt for cnt in contours if 100 < cv2.contourArea(cnt) < 10000]
+
+        # Recognize characters using Tesseract
+        results = []
+        for cnt in key_contours:
+            x, y, w, h = cv2.boundingRect(cnt)
+            key_roi = gray[max(y-5,0):y+h+5, max(x-5,0):x+w+5]
+            if key_roi.shape[0] < 20 or key_roi.shape[1] < 20:
+                key_roi = cv2.resize(key_roi, (0, 0), fx=2, fy=2)
+            char = pytesseract.image_to_string(key_roi, config='--psm 10 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789').strip()
+            if char and not char.isdigit() and char.upper() != 'P':
+                results.append(((x, y, w, h), char))
+
+        # Format output in Tesseract-style dict
+        text_boxes = {'left': [], 'top': [], 'width': [], 'height': [], 'conf': [], 'text': []}
+        for (x, y, w, h), char in results:
+            text_boxes['left'].append(x)
+            text_boxes['top'].append(y)
+            text_boxes['width'].append(w)
+            text_boxes['height'].append(h)
+            text_boxes['conf'].append(95)
+            text_boxes['text'].append(char)
+
+        return text_boxes
 
     def compute_3d_points_from_text(self, text_boxes, depth_map):
         self.log("Computing 3D points from text regions...")
