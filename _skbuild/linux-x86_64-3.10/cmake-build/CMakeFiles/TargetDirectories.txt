@@ -1,0 +1,7 @@
+/home/umdloop/auto_typing_ws/_skbuild/linux-x86_64-3.10/cmake-build/CMakeFiles/motor_cpp.dir
+/home/umdloop/auto_typing_ws/_skbuild/linux-x86_64-3.10/cmake-build/CMakeFiles/edit_cache.dir
+/home/umdloop/auto_typing_ws/_skbuild/linux-x86_64-3.10/cmake-build/CMakeFiles/rebuild_cache.dir
+/home/umdloop/auto_typing_ws/_skbuild/linux-x86_64-3.10/cmake-build/CMakeFiles/list_install_components.dir
+/home/umdloop/auto_typing_ws/_skbuild/linux-x86_64-3.10/cmake-build/CMakeFiles/install.dir
+/home/umdloop/auto_typing_ws/_skbuild/linux-x86_64-3.10/cmake-build/CMakeFiles/install/local.dir
+/home/umdloop/auto_typing_ws/_skbuild/linux-x86_64-3.10/cmake-build/CMakeFiles/install/strip.dir

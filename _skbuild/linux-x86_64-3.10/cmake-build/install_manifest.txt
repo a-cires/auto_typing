@@ -1,0 +1,1 @@
+/home/umdloop/auto_typing_ws/_skbuild/linux-x86_64-3.10/cmake-install/auto_typing/motor_control/motor_cpp.cpython-310-x86_64-linux-gnu.so
