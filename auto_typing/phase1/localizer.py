@@ -2,6 +2,7 @@
 import cv2
 import numpy as np
 import pytesseract
+pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 from pathlib import Path
 from datetime import datetime
 from auto_typing.utils.config import ROOT_DIR
@@ -89,8 +90,8 @@ class Phase1KeyboardLocalization:
 
     def detect_text_regions(self, image):
         self.log("Detecting text regions with Tesseract...")
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        text_data = pytesseract.image_to_data(gray, output_type=pytesseract.Output.DICT)
+        print("Detecting text regions with Tesseract...")
+        text_data = pytesseract.image_to_data(image, output_type=pytesseract.Output.DICT)
         return text_data
 
     def compute_3d_points_from_text(self, text_boxes, depth_map):

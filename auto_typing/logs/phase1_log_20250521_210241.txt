@@ -1,0 +1,6 @@
+2025-05-21T21:02:41.808011 - Initialized Phase1KeyboardLocalization at 20250521_210241
+2025-05-21T21:02:41.814030 - Loaded camera matrix from file.
+2025-05-21T21:02:41.815017 - Estimating depth from optical flow...
+2025-05-21T21:02:41.818457 - Detecting good features to track (Shi-Tomasi)...
+2025-05-21T21:02:41.833018 - Detected 604 trackable points.
+2025-05-21T21:02:41.839530 - Tracked 568 points with valid depth estimates.

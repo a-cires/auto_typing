@@ -1,0 +1,3 @@
+2025-05-21T21:11:11.634075 - Initialized Phase1KeyboardLocalization at 20250521_211111
+2025-05-21T21:11:11.639633 - Loaded camera matrix from file.
+2025-05-21T21:11:11.644644 - Detecting text regions with Tesseract...

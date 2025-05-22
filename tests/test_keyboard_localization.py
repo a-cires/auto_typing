@@ -1,8 +1,9 @@
-
+import sys
 import cv2
 import numpy as np
 import argparse
 from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 from auto_typing.phase1.localizer import Phase1KeyboardLocalization
 from auto_typing.utils.config import load_config, ROOT_DIR
 from datetime import datetime
